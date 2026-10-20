@@ -1,19 +1,26 @@
+<script setup lang="ts">
+const emit = defineEmits<{
+  openInfo: [section: 'kontakt' | 'meist' | 'tule-toole']
+  openShopInfo: [section: 'muugitingimused' | 'tarneviisid' | 'tagastus' | 'garantiitingimused']
+}>()
+</script>
+
 <template>
   <footer class="site-footer">
     <div class="site-footer__inner">
       <div class="footer-column">
         <h2>Ettevõte</h2>
-        <a href="#">Kontakt</a>
-        <a href="#">Meist</a>
+        <a href="#kontakt" @click.prevent="emit('openInfo', 'kontakt')">Kontakt</a>
+        <a href="#meist" @click.prevent="emit('openInfo', 'meist')">Meist</a>
         <a href="#">Istikuärid</a>
-        <a href="#">Tule tööle!</a>
+        <a href="#tule-toole" @click.prevent="emit('openInfo', 'tule-toole')">Tule tööle!</a>
       </div>
       <div class="footer-column">
         <h2>E-pood</h2>
-        <a href="#">Müügitingimused</a>
-        <a href="#">Tarneviisid</a>
-        <a href="#">Tagastus</a>
-        <a href="#">Garantiitingimused</a>
+        <a href="#muugitingimused" @click.prevent="emit('openShopInfo', 'muugitingimused')">Müügitingimused</a>
+        <a href="#tarneviisid" @click.prevent="emit('openShopInfo', 'tarneviisid')">Tarneviisid</a>
+        <a href="#tagastus" @click.prevent="emit('openShopInfo', 'tagastus')">Tagastus</a>
+        <a href="#garantiitingimused" @click.prevent="emit('openShopInfo', 'garantiitingimused')">Garantiitingimused</a>
       </div>
       <div class="footer-column footer-social">
         <h2>Jälgi meid</h2>

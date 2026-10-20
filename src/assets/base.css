@@ -2,10 +2,11 @@
   font-family: "Trebuchet MS", "Segoe UI", sans-serif;
   color: #285c4b;
   background: #eee9dd;
+  font-size: 16px;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
 }
 * { box-sizing: border-box; }
-body { margin: 0; min-width: 320px; min-height: 100vh; background: #eee9dd; }
+body { margin: 0; min-width: 320px; min-height: 100vh; background: #eee9dd; line-height: 1.5; }
 button, input { font: inherit; }
 button { cursor: pointer; }

@@ -25,12 +25,14 @@ const icon = (category: 'Taimed' | 'Lillesibulad' | 'Seemned' | 'Aiatarvikud') =
         <span class="round-icon">{{ icon(category as 'Taimed' | 'Lillesibulad' | 'Seemned' | 'Aiatarvikud') }}</span>
         <b>{{ category }}</b><span class="menu-chevron" :class="{ expanded: props.expandedCategories[category] }"></span>
       </button>
-      <div v-if="props.expandedCategories[category]" class="menu-subgroup">
-        <button v-for="item in subItems" :key="item" class="sub-row"
-          @click="category === 'Lillesibulad' ? emit('openCategory', item as ProductFilter) : undefined">
-          {{ item }} <span class="sub-chevron"></span>
-        </button>
-      </div>
+      <Transition name="category-dropdown">
+        <div v-if="props.expandedCategories[category]" class="menu-subgroup">
+          <button v-for="item in subItems" :key="item" class="sub-row"
+            @click="emit('openCategory', item as ProductFilter)">
+            {{ item }} <span class="sub-chevron"></span>
+          </button>
+        </div>
+      </Transition>
     </div>
   </section>
 </template>
