@@ -12,7 +12,6 @@ const emit = defineEmits<{
         <h2>Ettevõte</h2>
         <a href="#kontakt" @click.prevent="emit('openInfo', 'kontakt')">Kontakt</a>
         <a href="#meist" @click.prevent="emit('openInfo', 'meist')">Meist</a>
-        <a href="#">Istikuärid</a>
         <a href="#tule-toole" @click.prevent="emit('openInfo', 'tule-toole')">Tule tööle!</a>
       </div>
       <div class="footer-column">
