@@ -13,12 +13,13 @@ import ShoppingCart from './components/ShoppingCart.vue'
 import { products } from './data/products'
 import { useCart } from './composables/useCart'
 import { useNavigation } from './composables/useNavigation'
-import type { CategoryGroup, Product, ProductFilter, ProductSort } from './types'
+import type { CategoryGroup, DeliveryMethod, Product, ProductFilter, ProductSort } from './types'
 
 const { page, navigate } = useNavigation()
 const { items: cart, count: cartCount, total: cartTotal, add: addToCart, changeQuantity, clear: clearCart } = useCart()
 const selectedCategory = ref<ProductFilter>('Krookused')
 const productSort = ref<ProductSort>('default')
+const delivery = ref<DeliveryMethod>('parcel-locker')
 const expandedCategories = ref<Record<CategoryGroup, boolean>>({
   Taimed: false,
   Lillesibulad: true,
@@ -36,7 +37,18 @@ const visibleProducts = computed(() => {
     if (productSort.value === 'price-desc') return second.price - first.price
     return first.id - second.id
   })
+
 })
+
+const parcelLockerCost = computed(() => {
+  if (cartTotal.value >= 30) return 0
+  return 2.99
+})
+const shippingCost = computed(() => {
+  if (!cart.value.length) return 0
+  return delivery.value === 'parcel-locker' ? parcelLockerCost.value : 5.99
+})
+const cartGrandTotal = computed(() => cartTotal.value + shippingCost.value)
 
 function openCategory(category: ProductFilter) {
   selectedCategory.value = category
@@ -74,7 +86,7 @@ async function openShopInfo(section: 'muugitingimused' | 'tarneviisid' | 'tagast
     <ShopInfoPage v-else-if="page === 'shop-info'" />
     <CategoryMenu v-else-if="page === 'menu'" :expanded-categories="expandedCategories" @toggle="toggleCategory" @open-category="openCategory" />
     <ProductGrid v-else-if="page === 'products'" :category="selectedCategory" :products="visibleProducts" :sort="productSort" @change-sort="productSort = $event" @add-to-cart="addToCart" />
-    <ShoppingCart v-else-if="page === 'cart'" :items="cart" :total="cartTotal" @change-quantity="changeQuantity" @checkout="navigate('checkout')" />
+    <ShoppingCart v-else-if="page === 'cart'" :items="cart" :total="cartGrandTotal" :delivery="delivery" :parcel-locker-cost="parcelLockerCost" @change-quantity="changeQuantity" @change-delivery="delivery = $event" @checkout="navigate('checkout')" />
     <CheckoutPage v-else-if="page === 'checkout'" @back="navigate('cart')" @submit="completePurchase" />
     <section v-else class="page success-page">
       <div class="success-card">

@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import type { CartItem } from '../types'
+import type { CartItem, DeliveryMethod } from '../types'
 
-defineProps<{ items: CartItem[]; total: number }>()
+defineProps<{ items: CartItem[]; total: number; delivery: DeliveryMethod; parcelLockerCost: number }>()
 const emit = defineEmits<{
   changeQuantity: [id: number, amount: number]
+  changeDelivery: [delivery: DeliveryMethod]
   checkout: []
 }>()
 </script>
@@ -18,7 +19,25 @@ const emit = defineEmits<{
       </div>
     </div>
     <div v-else class="empty-cart">Sinu ostukorv on tühi.</div>
+    <fieldset class="delivery-options">
+      <legend>Vali transport</legend>
+      <label>
+        <input type="radio" name="delivery" value="parcel-locker" :checked="delivery === 'parcel-locker'" @change="emit('changeDelivery', 'parcel-locker')" />
+        <span><b>Pakiautomaat</b><small>{{ items.length ? (parcelLockerCost ? `${parcelLockerCost.toFixed(2)} €` : 'Tasuta') : '—' }}</small></span>
+      </label>
+      <label>
+        <input type="radio" name="delivery" value="courier" :checked="delivery === 'courier'" @change="emit('changeDelivery', 'courier')" />
+        <span><b>Kuller</b><small>{{ items.length ? '5.99 €' : '—' }}</small></span>
+      </label>
+    </fieldset>
     <div class="coupon"><b>Kasuta kupongi</b><input placeholder="Sisesta kupongi kood" /></div>
-    <div class="cart-total"><b>Summa: {{ total ? `${total.toFixed(2)} €` : '--.-- €' }}</b><button :disabled="!items.length" @click="emit('checkout')">Maksma</button></div>
+    <div class="cart-total">
+      <div class="cart-total__breakdown">
+        <span>Tooted: <b>{{ items.length ? `${(total - (delivery === 'parcel-locker' ? (parcelLockerCost || 0) : 5.99)).toFixed(2)} €` : '--.-- €' }}</b></span>
+        <span>Transport: <b>{{ items.length ? (delivery === 'parcel-locker' ? (parcelLockerCost ? `${parcelLockerCost.toFixed(2)} €` : 'Tasuta') : '5.99 €') : '--.-- €' }}</b></span>
+        <strong>Kokku: {{ total ? `${total.toFixed(2)} €` : '--.-- €' }}</strong>
+      </div>
+      <button :disabled="!items.length" @click="emit('checkout')">Maksma</button>
+    </div>
   </section>
 </template>

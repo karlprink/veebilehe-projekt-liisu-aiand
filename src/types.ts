@@ -14,6 +14,7 @@ export type ProductFilter =
   | 'Muld ja väetised'
   | 'Tööriistad'
 export type ProductSort = 'default' | 'name-asc' | 'price-asc' | 'price-desc'
+export type DeliveryMethod = 'parcel-locker' | 'courier'
 
 export interface Product {
   id: number
