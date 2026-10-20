@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { CartItem, DeliveryMethod } from '../types'
+import { shippingPrices } from '../data/shipping'
 
 defineProps<{ items: CartItem[]; total: number; delivery: DeliveryMethod; parcelLockerCost: number }>()
 const emit = defineEmits<{
@@ -27,7 +28,7 @@ const emit = defineEmits<{
       </label>
       <label>
         <input type="radio" name="delivery" value="courier" :checked="delivery === 'courier'" @change="emit('changeDelivery', 'courier')" />
-        <span><b>Kuller</b><small>{{ items.length ? '5.99 €' : '—' }}</small></span>
+        <span><b>Kuller</b><small>{{ items.length ? `${shippingPrices.courier.toFixed(2)} €` : '—' }}</small></span>
       </label>
     </fieldset>
     <div class="coupon"><b>Kasuta kupongi</b><input placeholder="Sisesta kupongi kood" /></div>

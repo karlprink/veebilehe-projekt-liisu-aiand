@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import type { CategoryGroup, ProductCategory, ProductFilter } from '../types'
+import { categoryItems } from '../data/categories'
+import type { CategoryGroup, ProductFilter } from '../types'
 
 const props = defineProps<{ expandedCategories: Record<CategoryGroup, boolean> }>()
 const emit = defineEmits<{
@@ -7,7 +8,6 @@ const emit = defineEmits<{
   openCategory: [category: ProductFilter]
 }>()
 
-const categories: ProductCategory[] = ['Krookused', 'Liiliad', 'Nartsissid', 'Tulbid']
 const icon = (category: 'Taimed' | 'Lillesibulad' | 'Seemned' | 'Aiatarvikud') =>
   ({ Taimed: '♧', Lillesibulad: '✿', Seemned: '●', Aiatarvikud: '⚒' })[category]
 </script>
@@ -15,12 +15,7 @@ const icon = (category: 'Taimed' | 'Lillesibulad' | 'Seemned' | 'Aiatarvikud') =
 <template>
   <section class="page menu-page">
     <h1>Menüü</h1>
-    <div v-for="(subItems, category) in {
-      Taimed: ['Toataimed', 'Püsikud', 'Üheaastased taimed'],
-      Lillesibulad: ['Kõik lillesibulad', ...categories],
-      Seemned: ['Lilleseemned', 'Köögiviljaseemned', 'Maitsetaimede seemned'],
-      Aiatarvikud: ['Potid ja amplid', 'Muld ja väetised', 'Tööriistad'],
-    }" :key="category" class="menu-group">
+    <div v-for="(subItems, category) in categoryItems" :key="category" class="menu-group">
       <button class="menu-row" :class="{ active: props.expandedCategories[category] }" @click="emit('toggle', category)">
         <span class="round-icon">{{ icon(category as 'Taimed' | 'Lillesibulad' | 'Seemned' | 'Aiatarvikud') }}</span>
         <b>{{ category }}</b><span class="menu-chevron" :class="{ expanded: props.expandedCategories[category] }"></span>
